@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../models/listing.dart';
 import '../state/app_state.dart';
 
@@ -32,7 +33,7 @@ class ListingDetail extends StatelessWidget {
                         SizedBox(height: 8),
                         Text('${listing.city} • ${listing.rooms} rooms', style: TextStyle(color: Colors.grey[600])),
                         SizedBox(height: 6),
-                        Text('\$${listing.price.toStringAsFixed(0)}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
+                        Text('RWF ${NumberFormat('#,###', 'en_US').format(listing.price)}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
                         SizedBox(height: 12),
                         Text(listing.description, style: TextStyle(color: Colors.grey[800])),
                         SizedBox(height: 16),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../state/app_state.dart';
 import '../models/listing.dart';
 import 'listing_detail.dart';
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-      appBar: AppBar(title: Text('Tartan Homes'), actions: [IconButton(icon: Icon(Icons.people), onPressed: () => Navigator.pushNamed(context, '/roommates'))]),
+      appBar: AppBar(title: Text('Tartan Link'), actions: []),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -57,56 +58,118 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildListings() {
-    final app = Provider.of<AppState>(context);
-    final listings = app.listings;
-    return ListView.builder(
-      itemCount: listings.length,
-      itemBuilder: (_, i) {
-        final l = listings[i];
-        return GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ListingDetail(listing: l))),
-          child: Card(
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
-                  child: SizedBox(width: 120, height: 100, child: Image.asset(l.image, fit: BoxFit.cover)),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(l.title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                        SizedBox(height: 6),
-                        Text(l.description, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.grey[700])),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${l.city} • ${l.rooms}br', style: TextStyle(color: Colors.grey[600])),
-                            Row(
-                              children: [
-                                Text('\$${l.price.toStringAsFixed(0)}', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                                IconButton(
-                                  icon: Icon(app.isFavorite(l.id) ? Icons.favorite : Icons.favorite_border, color: app.isFavorite(l.id) ? Theme.of(context).primaryColor : Colors.grey),
-                                  onPressed: () => app.toggleFavorite(l.id),
-                                )
-                              ],
-                            )
-                          ],
-                        )
-                      ],
+Widget _buildListings() {
+  final app = Provider.of<AppState>(context);
+  final listings = app.listings;
+
+  return ListView.builder(
+    padding: const EdgeInsets.all(16),
+    itemCount: listings.length,
+    itemBuilder: (_, i) {
+      final l = listings[i];
+      return GestureDetector(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ListingDetail(listing: l)),
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Listing Image
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      l.image,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                )
-              ],
-            ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: IconButton(
+                      icon: Icon(
+                        app.isFavorite(l.id) ? Icons.favorite : Icons.favorite_border,
+                        color: app.isFavorite(l.id)
+                            ? Theme.of(context).primaryColor
+                            : Colors.white,
+                        size: 28,
+                      ),
+                      onPressed: () => app.toggleFavorite(l.id),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Listing Details
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      l.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        height: 1.4,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${l.city} • ${l.rooms}br',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          'RWF ${NumberFormat('#,###', 'en_US').format(l.price)}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 }

@@ -30,7 +30,8 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         user.studentAnswers.addAll(answers);
         app.setUser(user);
       }
-      Navigator.pushReplacementNamed(context, '/home');
+      // Clear navigation stack and go to home so back won't return to questionnaire
+      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
     }
   }
 

@@ -45,6 +45,21 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // roommate ads (users posting they want a roommate / requirements)
+  final List<Map<String, dynamic>> _roommateAds = [];
+
+  List<Map<String, dynamic>> get roommateAds => List.unmodifiable(_roommateAds);
+
+  void postRoommateAd(Map<String, dynamic> ad) {
+    _roommateAds.insert(0, ad);
+    notifyListeners();
+  }
+
+  void removeRoommateAd(String adId) {
+    _roommateAds.removeWhere((a) => a['id'] == adId);
+    notifyListeners();
+  }
+
   bool isFavorite(String listingId) => _favorites.contains(listingId);
 
   List<Map<String, String>> getChat(String otherUserId) {
