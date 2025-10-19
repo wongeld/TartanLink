@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.0.5
   google_fonts: ^5.0.0
+  intl: ^0.18.1
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -65,10 +67,20 @@ flutter:
     - assets/images/sample_house1.jpg
     - assets/images/sample_house2.jpg
     - assets/images/sample_house3.jpg
-    - assets/images/person1.jpeg
-    - assets/images/person2.jpeg
-    - assets/images/person3.jpeg
+    - assets/images/sample_house4.jpg
+    - assets/images/sample_house5.jpg
+    - assets/images/sample_house6.jpg
+    - assets/images/sample_house7.jpg
+    - assets/images/sample_house8.jpg
+    - assets/images/person1.jpg
+    - assets/images/person2.jpg
+    - assets/images/person3.jpg
     - assets/images/person4.jpg
+    - assets/images/person5.jpg
+    - assets/images/person6.jpg
+    - assets/images/person7.jpg
+    - assets/images/person8.jpg
+    - assets/icon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -100,3 +112,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
+  adaptive_icon_background: "#ededed"
+  adaptive_icon_foreground: "assets/icon.png"

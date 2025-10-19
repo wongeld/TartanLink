@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
+import 'dart:async';
 
 class ChatDetailScreen extends StatefulWidget {
   final String userId;
@@ -57,8 +58,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 final isMe = m['from'] == (app.user?.id ?? 'me');
 
                 return Align(
-                  alignment:
-                      isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -71,10 +71,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16),
-                        bottomLeft:
-                            Radius.circular(isMe ? 16 : 0),
-                        bottomRight:
-                            Radius.circular(isMe ? 0 : 16),
+                        bottomLeft: Radius.circular(isMe ? 16 : 0),
+                        bottomRight: Radius.circular(isMe ? 0 : 16),
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -98,8 +96,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         Text(
                           '12:30 PM',
                           style: TextStyle(
-                            color:
-                                isMe ? Colors.white70 : Colors.grey.shade500,
+                            color: isMe ? Colors.white70 : Colors.grey.shade500,
                             fontSize: 11,
                           ),
                         ),
@@ -143,14 +140,20 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      if (_controller.text.trim().isEmpty) return;
-                      app.sendMessage(widget.userId, app.user?.id ?? 'me',
-                          _controller.text.trim());
+                      final text = _controller.text.trim();
+                      if (text.isEmpty) return;
+
+                      app.sendMessage(widget.userId, app.user?.id ?? 'me', text);
                       _controller.clear();
+
+                      // Scroll after short delay
                       Future.delayed(const Duration(milliseconds: 50), () {
                         if (_scroll.hasClients)
                           _scroll.jumpTo(_scroll.position.maxScrollExtent);
                       });
+
+                      // Auto-reply logic
+                      _handleAutoReply(app, text);
                     },
                     child: CircleAvatar(
                       radius: 24,
@@ -165,5 +168,34 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         ],
       ),
     );
+  }
+
+  // --------------------------------------------------------------------------
+  // 🧠 Automated reply logic
+  // --------------------------------------------------------------------------
+  void _handleAutoReply(AppState app, String userMessage) {
+    final lower = userMessage.toLowerCase();
+
+    String reply;
+
+    if (lower.contains('hi') || lower.contains('hello')) {
+      reply = 'Hi there! Thanks for your interest in the property.';
+    } else if (lower.contains('price')) {
+      reply = 'The house is going for around RWF 250,000 per month';
+    } else if (lower.contains('location')) {
+      reply = 'It’s located about 10 minutes from CMU-Africa';
+    } else if (lower.contains('furnished')) {
+      reply = 'Yes! The apartment is fully furnished and ready to move in';
+    } else if (lower.contains('available')) {
+      reply = 'It’s currently available! Would you like to schedule a visit?';
+    } else {
+      reply = 'I’ll get back to you with more details soon.';
+    }
+
+    Timer(const Duration(seconds: 1), () {
+      app.sendMessage(widget.userId, widget.userId, reply);
+      if (_scroll.hasClients)
+        _scroll.jumpTo(_scroll.position.maxScrollExtent);
+    });
   }
 }

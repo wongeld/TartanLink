@@ -1,24 +1,16 @@
-TartanLink
+# flutter_application_1
 
-Find your perfect living match — built by Tartans, for Tartans.
+A new Flutter project.
 
-TartanLink is an exclusive co-living platform for the Carnegie Mellon University Africa community.
-It helps students match with compatible roommates and discover verified housing listings in Kigali.
+## Getting Started
 
-Tech Stack
+This project is a starting point for a Flutter application.
 
-Frontend: React (Web) & Flutter (Mobile)
-Backend: Node.js & Firebase
-Authentication: CMU SSO
-Database: Firestore
+A few resources to get you started if this is your first Flutter project:
 
-Key Features
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-Compatibility quiz for personalized roommate matching
-Verified property listings from trusted landlords
-Secure SSO login with CMU credentials
-Built-in trust and community focus
-
-Vision
-
-A community-driven platform that simplifies housing for Tartans while fostering trust and connection.
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
